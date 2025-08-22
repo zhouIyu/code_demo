@@ -1,12 +1,11 @@
-class CanceledPromise {
+class CancelPromise {
   constructor(executor) {
-    this.isCanceled = false
     this.reject = null
-
+    this.isCanceled = false
     this.promise = new Promise((resolve, reject) => {
       this.reject = reject
       if (this.isCanceled) {
-        return reject(new Error('Promise canceled'))
+        return reject(new Error('Promise Canceled'))
       }
 
       executor(
@@ -32,13 +31,14 @@ class CanceledPromise {
     return this.promise.catch(onRejected)
   }
 
-  finally(onFinally) {
-    return this.promise.finally(onFinally)
+  finally(fn) {
+    return this.promise.finally(fn)
   }
 
-  cancel(reason = 'Promise Cancel') {
-    if (this.isCanceled) return
-    this.isCanceled = true
-    this.reject(new Error(reason))
+  cancel(reason = 'Promise Canceled') {
+    if (!this.isCanceled) {
+      this.isCanceled = true
+      this.reject(new Error(reason))
+    }
   }
 }
